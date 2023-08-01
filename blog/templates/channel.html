@@ -1,0 +1,30 @@
+{% extends "mbase.html" %}
+{% load static %}
+
+{% block content %}
+
+<script>
+  var offset = new Date().getTimezoneOffset();
+  var source = new EventSource("/stream/"+offset);
+//  document.cookie="offset = " + offset + "; Path=/";
+  source.onmessage = function(event) {
+    document.getElementById("result").innerHTML = event.data;
+  };
+</script>
+
+<h1>{{ channel }}</h1>
+
+<textarea id="result" readonly name="ta" rows="10" cols="150">
+</textarea>
+<p></p>
+
+<form method="post"> {% csrf_token %}
+    <input type="text" name="text" size="100" maxlength="200" required id="id_text">
+    <input type="submit" value="Send">
+</form>
+    <div id="commonbox" >    
+    <a href="/channels/" >
+        <img src={% static "isdoor.png" %}> </a>
+    </div>
+{% endblock %}
+

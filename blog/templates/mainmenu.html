@@ -1,0 +1,22 @@
+﻿{% extends "mbase.html" %}
+{% load static %}
+
+{% block content %}
+Welcome, {%include 'usertitle.html'%}
+
+<h2>
+<ul>
+{% if not user.is_authenticated %} <li><a href="/accounts/login/?next=/">Вход</a>{%endif%}
+{% if request.COOKIES.sessionid %} <li><a href="/blog">Блог</a>
+{%endif%}
+</ul>
+<ul>
+{%if user.is_staff %}<li><a href="/admin/">Администрирование</a> {%endif%}
+</ul>
+</h2>
+<div id="commonbox" >    
+    <a href="/accounts/logout/?next=/">
+        <img src={% static "isdoor.png" %}> </a>
+</div>
+
+{% endblock %}

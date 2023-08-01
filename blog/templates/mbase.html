@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href={% static "css/style.css" %}/>
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% block footer %}
+
+    <div id="commonbox" >    
+    <hr>
+    <p>Copyright blah blah..</p>
+    </div>
+    {% endblock %}
+</body>
+</html>

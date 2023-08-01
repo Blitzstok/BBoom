@@ -1,0 +1,15 @@
+{% extends "mbase.html" %}
+{% load static %}
+
+{% block content %}
+<h2> Новый пост: </h2>
+{{ object }}
+<form method="post">{% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Ok">
+</form>
+{% endblock %}
+    <input type="text" name="name" maxlength="200" required id="id_name">
+

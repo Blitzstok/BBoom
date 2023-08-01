@@ -1,0 +1,23 @@
+{% extends "mbase.html" %}
+{% load static %}
+{% block content %}
+
+<h1>Happy Blog</h1>
+<ul>
+{% for post in object_list %}
+    <li>{{ post.created|date:"Y.m.d H:i" }} - {{ post.title }}
+        {% if user == post.user %}
+            <a id="attention" href="/blog/{{post.id}}"> X </a>
+        {% endif %}
+        <br> {{ post.body }}
+    </li>
+{% empty %}
+    <li>No posts yet.</li>
+{% endfor %}
+</ul>
+{% if user.is_authenticated %} <li><a href="/blog/add">Новый пост</a>{%endif%}
+    <div id="commonbox" >    
+    <a href="/" >
+        <img src={% static "isdoor.png" %}> </a>
+    </div>
+{% endblock %}
