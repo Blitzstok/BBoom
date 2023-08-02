@@ -18,7 +18,24 @@ mainmenu = TemplateView.as_view(template_name='mainmenu.html')
 class Blog(ListView):
     model = Post
     template_name = "Post_list.html"
-    ordering = ['created']
+    ordering = ['-created']
+
+    def get_queryset(self):
+        if 'pk' in self.kwargs:
+            return Post.objects.filter(user_id=self.kwargs["pk"])
+        else:
+            return Post.objects.all()
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'pk' in self.kwargs:
+            context['author'] = User.objects.get(pk=self.kwargs["pk"])
+        return context
+
+class UserTable(ListView):
+    model = User
+    template_name = "user_list.html"
+
 
 class DeletePost(DeleteView):
     model = Post

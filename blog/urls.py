@@ -8,16 +8,29 @@ urlpatterns = [
     path(
         'blog/',
         login_required(views.Blog.as_view()),
-        name='blog'),
+        name='blog'
+    ),
     path(
         'blog/add',
         login_required(views.AddPost.as_view()),
-        name='addpost'),
+        name='addpost'
+    ),
     path(
         'blog/<int:pk>',
         login_required(views.DeletePost.as_view()),
-        name='delpost'),
-
+        name='delpost'
+    ),
+    path(
+        'usertable/',
+        login_required(views.UserTable.as_view()),
+        name='usertab'
+    ),
+    path(
+        'user/<int:pk>',
+        login_required(views.Blog.as_view()),
+        name='blog'
+    ),
+#   API Entries
     path('users/', views.UserList.as_view()),
     path('posts/<int:pk>/', views.PostDetail.as_view()),
     path('posts/', views.PostList.as_view()),

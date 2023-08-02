@@ -3,6 +3,7 @@
 {% block content %}
 
 <h1>Happy Blog</h1>
+{% if author %} Только посты автора {{ author.username }} {% endif %}
 <ul>
 {% for post in object_list %}
     <li>{{ post.created|date:"Y.m.d H:i" }} - {{ post.title }}
