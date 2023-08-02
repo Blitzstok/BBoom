@@ -3,15 +3,18 @@ from django.shortcuts import render
 # Create your views here.
 
 from rest_framework import generics, views
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
 from . import serializers
 from .models import User, Post
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView
-from django.contrib.auth.decorators import login_required
 
-
+### Ui part ###
 mainmenu = TemplateView.as_view(template_name='mainmenu.html')
 
 
@@ -53,8 +56,12 @@ class AddPost(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+### API part ###
+
 
 class UserList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
@@ -63,6 +70,8 @@ class UserList(generics.ListCreateAPIView):
 
 
 class PostList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
     serializer_class = serializers.PostSerializer
 
     def get_queryset(self):
@@ -76,11 +85,18 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveDestroyAPIView):
-    queryset = Post.objects.all()
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
     serializer_class = serializers.PostSerializer
+
+    def get_queryset(self):
+        return Post.objects.all()
 
     def perform_create(self, serializer):
         instance = serializer.save()
 
     def perform_destroy(self, serializer):
+        instance = self.get_object()
+        if instance.user != self.request.auth.user:
+            raise PermissionDenied("can delete own only")
         instance = serializer.delete()
