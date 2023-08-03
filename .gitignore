@@ -11,3 +11,5 @@ __pycache__/
 
 0/
 someshit.*
+*.0
+*.1
