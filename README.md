@@ -3,10 +3,9 @@
 Выполнить
 
 manage.py makemigrations
-
 manage.py migrate
-
 manage.py createsuperuser
 
+Для работы в GUI
 Зайти на localhost:8000, в админку, создать пользователей
 

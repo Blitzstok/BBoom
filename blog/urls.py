@@ -30,11 +30,10 @@ urlpatterns = [
         login_required(views.Blog.as_view()),
         name='blog'
     ),
-
-###    API Entries  ###
-    path('users/', views.UserList.as_view(), name = 'userlist'),
-    path('posts/<int:pk>/', views.PostDetail.as_view(), name = 'getpost'),
-    path('postsbyuser/<int:pk>', views.PostList.as_view(), name = 'postsbyuser'),
+    #    API Entries  #
+    path('users/', views.UserList.as_view(), name='userlist'),
+    path('posts/<int:pk>/', views.PostDetail.as_view(), name='getpost'),
+    path('postsbyuser/<int:pk>', views.PostList.as_view(), name='postsbyuser'),
     path('posts/', views.PostList.as_view()),
 ]
 

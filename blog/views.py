@@ -14,7 +14,7 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView
 
-### Ui part ###
+# Ui part ###
 mainmenu = TemplateView.as_view(template_name='mainmenu.html')
 
 
@@ -29,11 +29,12 @@ class Blog(ListView):
         else:
             return Post.objects.all()
 
-    def get_context_data(self,**kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if 'pk' in self.kwargs:
             context['author'] = User.objects.get(pk=self.kwargs["pk"])
         return context
+
 
 class UserTable(ListView):
     model = User
@@ -42,7 +43,7 @@ class UserTable(ListView):
 
 class DeletePost(DeleteView):
     model = Post
-    template_name='confirm_delete-a.html'
+    template_name = 'confirm_delete-a.html'
     success_url = "."
 
 
@@ -56,7 +57,7 @@ class AddPost(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-### API part ###
+# API part ###
 
 
 class UserList(generics.ListCreateAPIView):
@@ -70,8 +71,8 @@ class UserList(generics.ListCreateAPIView):
 
 
 class PostList(generics.ListCreateAPIView):
-#    permission_classes = (IsAuthenticated,)
-#    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
     serializer_class = serializers.PostSerializer
 
     def get_queryset(self):
