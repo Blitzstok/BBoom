@@ -10,6 +10,7 @@ __pycache__/
 *pnp*
 
 0/
+.vscode/
 someshit.*
 *.0
 *.1

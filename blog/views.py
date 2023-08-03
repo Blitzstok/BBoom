@@ -70,8 +70,8 @@ class UserList(generics.ListCreateAPIView):
 
 
 class PostList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+#    permission_classes = (IsAuthenticated,)
+#    authentication_classes = (TokenAuthentication,)
     serializer_class = serializers.PostSerializer
 
     def get_queryset(self):
