@@ -1,17 +1,12 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from django.urls import reverse
 
 from .models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.test import force_authenticate
-from rest_framework import viewsets
 
-
-# Create your tests here.
 client = Client()
 
 
@@ -19,7 +14,7 @@ class UserTest(TestCase):
 
     def test_not_allowed(self):
         # get API response
-        response = client.get(reverse('userlist'))
+        response = client.get('/users/')
         # get data from db
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -36,11 +31,9 @@ class OneUserTest(APITestCase):
 
     def test_userlist(self):
         self.client.force_authenticate(user=self.user, token=self.token)
-        # self.client.force_login(user=self.user)
+        # self.client.force_login(user=self.user) -- for gui
         response = self.client.get('/users/', HTTP_AUTHORIZATION=self.token)
         self.assertEqual(response.status_code, 200)
-        # json_response = json.loads(response.render().content)   #['results']
-        # print(json_response)
 
     def test_add_delete_post(self):
         self.client.force_authenticate(user=self.user, token=self.token)
@@ -52,14 +45,16 @@ class OneUserTest(APITestCase):
         self.post = json.loads(response.render().content)['id']
         self.assertEqual(response.status_code, 201)
 
-        response = self.client.get('/posts/1/', HTTP_AUTHORIZATION=self.token)
+        response = self.client.get('/posts/' + str(self.post) + '/',
+                                   HTTP_AUTHORIZATION=self.token)
         self.assertEqual(response.status_code, 200)
 
         response = self.client.delete('/posts/' + str(self.post) + '/',
                                       HTTP_AUTHORIZATION=self.token)
         self.assertEqual(response.status_code, 204)
 
-        response = self.client.get('/posts/1/', HTTP_AUTHORIZATION=self.token)
+        response = self.client.delete('/posts/' + str(self.post) + '/',
+                                      HTTP_AUTHORIZATION=self.token)
         self.assertEqual(response.status_code, 404)
 
     def test_postlist(self):
@@ -69,8 +64,6 @@ class OneUserTest(APITestCase):
                                    HTTP_AUTHORIZATION=self.token)
         self.assertEqual(response.status_code, 200)
         # json_response = json.loads(response.render().content)['results']
-        # json_response = json.loads(response.render().content)   #['results']
-        # print(response, json_response)
 
 
 class TwoUserTest(APITestCase):
@@ -90,7 +83,6 @@ class TwoUserTest(APITestCase):
 
     def test_add_delete_post(self):
         self.client.force_authenticate(user=self.user1, token=self.token1)
-        # self.uid1 = str(self.user.id)
         response = self.client.post('/posts/',
                                     data={"user": self.user1.id,
                                           "title": "post1", "body": "body1"},
